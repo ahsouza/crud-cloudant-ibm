@@ -1,0 +1,20 @@
+{
+  "port": 3000,
+  "cloudant_url": "https://apikey-v2-2v1qwo8vgzy17k64jkklc6gewiv28vkhfudollpaj34n:96c6fcbdf1b5f314949a908a6544c34f@2e39817a-d859-44d5-8d02-4e5feec111db-bluemix.cloudantnosqldb.appdomain.cloud",
+  "cloud_object_storage_apikey": "CC1Dh2XoRq68URe5nJhWM0Z7fMvxImKEnF5LcgBt6a6G",
+  "cloud_object_storage_endpoints": "https://control.cloud-object-storage.cloud.ibm.com/v2/endpoints",
+  "cloud_object_storage_iam_apikey_description": "Auto-generated for key fbd735a4-6f3c-4e50-bcaf-92128abf4615",
+  "cloud_object_storage_iam_apikey_name": "35f603e1-d6d9-4292-af5c-619b3cbc35fd",
+  "cloud_object_storage_iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Writer",
+  "cloud_object_storage_iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/a9529119713341a39193b0a8786a8c13::serviceid:ServiceId-6ab78766-b27c-46bb-af10-eeb68bccc461",
+  "cloud_object_storage_resource_instance_id": "crn:v1:bluemix:public:cloud-object-storage:global:a/a9529119713341a39193b0a8786a8c13:b3707197-7753-467c-bccb-28ec419699a4::",
+  "cloudant_apikey": "-1Uv_uzn2kYAYBUrslM9DA10DpptKfDqWfic4fG8CfDW",
+  "cloudant_host": "2e39817a-d859-44d5-8d02-4e5feec111db-bluemix.cloudantnosqldb.appdomain.cloud",
+  "cloudant_iam_apikey_description": "Auto-generated for key aa63db07-f8f7-4a7b-8a06-32a55b56bd41",
+  "cloudant_iam_apikey_name": "35f603e1-d6d9-4292-af5c-619b3cbc35fd",
+  "cloudant_iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Writer",
+  "cloudant_iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/a9529119713341a39193b0a8786a8c13::serviceid:ServiceId-b156305c-8d31-4695-9097-5b1d6cdc7dc0",
+  "cloudant_password": "96c6fcbdf1b5f314949a908a6544c34f",
+  "cloudant_port": 443,
+  "cloudant_username": "apikey-v2-2v1qwo8vgzy17k64jkklc6gewiv28vkhfudollpaj34n"
+}
