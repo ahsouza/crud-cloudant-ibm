@@ -18,15 +18,17 @@ const validate = validations => {
 
     res.status(400).json({errors: errors.array()})
   }
-};
+}
 
 // definindo rotas
-router.get('', BalancetesController.getBalancetes);
+router.get('/balancetes', BalancetesController.getBalancetes)
 router.post('', validate([
   body('companyId').isISO8601(),
   body('date').isISO8601(),
   body('balanceSheet').isAlphanumeric(),
   body('timestamp').isISO8601(),
-]), BalancetesController.addBalancete);
+]), BalancetesController.addBalancete)
+router.put('/update/:id', BalancetesController.updateBalancete)
+router.delete('/balancete/:id', BalancetesController.deleteBalancete)
 
 module.exports = router;
