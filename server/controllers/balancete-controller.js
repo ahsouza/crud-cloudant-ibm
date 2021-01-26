@@ -1,17 +1,20 @@
 // import módulos
+const functions = require('./../helpers/formatColsInRow');
 const IBMCloudEnv = require('ibm-cloud-env')
 IBMCloudEnv.init('/server/config/mappings.json')
 // Configurando Cloudant
-const CloudantSDK = require('@cloudant/cloudant')
+const CloudantSDK = require('@cloudant/cloudant');
 const cloudant = new CloudantSDK(IBMCloudEnv.getString('cloudant_url'))
 
 // NEW DATABASE 'balancete' caso ele ainda não existe
 cloudant.db.create('balancete')
-  .then(data => {
+  .then(async data => {
     console.log('Banco de Dados "balancete" criado com sucesso!')
   })
-  .catch(error => {
+  .catch(async error => {
     if (error.error === 'file_exists') {
+      var x = await functions.balanceSheet('41203 (-) IMPOSTOS SOBRE VENDAS E SERVIÇOS  107,31 D  2382,6  0 2.489,91 D');
+      console.log(x)
       console.log('Banco de Dados "balancete" já existe!')
     } else {
       console.log('Ocorreu um erro ao criar Banco De Dados "balancete"', error.error)
@@ -53,7 +56,7 @@ exports.getBalancetes = (req, res, next) => {
 
 // CREATE balancetes to database
 exports.addBalancete = (req, res, next) => {
-  console.log('In route - addBalancete')
+  console.log('In route - addBalancete');
   let balancete = {
     companyId: req.body.companyId,
     balanceSheet: req.body.balanceSheet,
@@ -62,7 +65,7 @@ exports.addBalancete = (req, res, next) => {
   };
   return balancete.insert(balancete)
     .then(addedBalancete => {
-      console.log('Balancete adicionado com sucesso!')
+      console.log('Balancete adicionado com sucesso!');
       return res.status(201).json({
         _id: addedBalancete.id,
         companyId: addedBalancete.companyId,
@@ -72,7 +75,7 @@ exports.addBalancete = (req, res, next) => {
       });
     })
     .catch(error => {
-      console.log('Falha ao tentar registrar balancete')
+      console.log('Falha ao tentar registrar balancete');
       return res.status(500).json({
         message: 'Falha ao tentar salvar balancete.',
         error: error,
@@ -82,7 +85,7 @@ exports.addBalancete = (req, res, next) => {
 
 // UPDATE balancetes to database
 exports.updateBalancete = (req, res, next) => {
-  console.log('In route - updateBalancete')
+  console.log('In route - updateBalancete');
 
   let modified_balancete = {
     _id: req.body.id,
@@ -92,16 +95,16 @@ exports.updateBalancete = (req, res, next) => {
 
   return balancete.update(modified_balancete)
     .then(()=>{
-      console.log('Balancete atualizado com sucesso!')
-      return res.status(201).json({ message: 'Balancete atualizado com sucesso!'})
+      console.log('Balancete atualizado com sucesso!');
+      return res.status(201).json({ message: 'Balancete atualizado com sucesso!'});
     })
     .catch(error => {
-      console.log('Falha ao tentar atualizar balancete')
+      console.log('Falha ao tentar atualizar balancete');
       return res.status(500).json({
         message: 'Falha ao tentar atualizar balancete.',
         error: error,
-      })
-    })
+      });
+    });
 };
 
 // DELETE balancete to database
@@ -120,5 +123,5 @@ exports.deleteBalancete = (req, res, next) => {
         message: 'Falha ao tentar remover balancete.',
         error: error,
       })
-    })
+    });
 }
