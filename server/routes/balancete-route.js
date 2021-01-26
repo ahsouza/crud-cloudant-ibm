@@ -23,9 +23,9 @@ const validate = validations => {
 // definindo rotas
 router.get('', BalancetesController.getBalancetes);
 router.post('', validate([
-  body('date').isInteger(),
-  body('balanceSheet').isAlphanumeric(),
   body('companyId').isISO8601(),
+  body('date').isISO8601(),
+  body('balanceSheet').isAlphanumeric(),
   body('timestamp').isISO8601(),
 ]), BalancetesController.addBalancete);
 
