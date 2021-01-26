@@ -22,13 +22,13 @@ const validate = validations => {
 
 // definindo rotas
 router.get('/balancetes', BalancetesController.getBalancetes)
-router.post('', validate([
+router.post('balancetes', validate([
   body('companyId').isISO8601(),
   body('date').isISO8601(),
   body('balanceSheet').isAlphanumeric(),
   body('timestamp').isISO8601(),
 ]), BalancetesController.addBalancete)
-router.put('/update/:id', BalancetesController.updateBalancete)
+router.put('/balancete/:id', BalancetesController.updateBalancete)
 router.delete('/balancete/:id', BalancetesController.deleteBalancete)
 
 module.exports = router;
