@@ -5,7 +5,7 @@ IBMCloudEnv.init('/server/config/mappings.json')
 const CloudantSDK = require('@cloudant/cloudant');
 const cloudant = new CloudantSDK(IBMCloudEnv.getString('cloudant_url'))
 
-// criando banco de dados nomeado 'balancete' caso ele ainda não existe
+// NEW DATABASE 'balancete' caso ele ainda não existe
 cloudant.db.create('balancete')
   .then(data => {
     console.log('Banco de Dados "balancete" criado com sucesso!')
@@ -17,9 +17,11 @@ cloudant.db.create('balancete')
       console.log('Ocorreu um erro ao criar Banco De Dados "balancete"', error.error)
     }
   })
+
+
 const balancete = cloudant.db.use('balancete');
 
-// get names from database
+// READ balancetes from database
 exports.getBalancetes = (req, res, next) => {
   console.log('In route - getBalancetes')
 
@@ -49,7 +51,7 @@ exports.getBalancetes = (req, res, next) => {
     })
 }
 
-// add name to database
+// CREATE balancetes to database
 exports.addBalancete = (req, res, next) => {
   console.log('In route - addBalancete');
   let balancete = {
@@ -73,6 +75,30 @@ exports.addBalancete = (req, res, next) => {
       console.log('Falha ao tentar registrar balancete');
       return res.status(500).json({
         message: 'Falha ao tentar salvar balancete.',
+        error: error,
+      });
+    });
+};
+
+// UPDATE balancetes to database
+exports.addBalancete = (req, res, next) => {
+  console.log('In route - updateBalancete');
+
+  let modified_balancete = {
+    _id: req.body.id,
+    companyId: req.body.companyId,
+    balanceSheet: req.body.balanceSheet,
+  }
+
+  return balancete.update(modified_balancete)
+    .then(()=>{
+      console.log('Balancete atualizado com sucesso!');
+      return res.status(201).json({ message: 'Balancete atualizado com sucesso!'});
+    })
+    .catch(error => {
+      console.log('Falha ao tentar atualizar balancete');
+      return res.status(500).json({
+        message: 'Falha ao tentar atualizar balancete.',
         error: error,
       });
     });
