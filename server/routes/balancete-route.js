@@ -21,7 +21,7 @@ const validate = validations => {
 }
 
 // definindo rotas
-router.get('/getAll', BalancetesController.getBalancetes);
+router.get('/getAll', BalancetesController.getBalancetesSheet);
 router.post('/save', BalancetesController.newBalancete);
 router.put('/update/:id', BalancetesController.updateBalancete);
 router.delete('/remove', BalancetesController.deleteBalancete);
