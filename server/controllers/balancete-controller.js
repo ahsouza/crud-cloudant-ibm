@@ -13,7 +13,7 @@ cloudant.db.create('balancete')
   })
   .catch(async error => {
     if (error.error === 'file_exists') {
-      var x = await functions.balanceSheet('41203 (-) IMPOSTOS SOBRE VENDAS E SERVIÇOS  107,31 D  2382,6  0 2.489,91 D');
+      var x = await functions.balanceSheet('41203 (-) IMPOSTOS SOBRE VENDAS E SERVIÇOS  107,31 D  2382,6  0 2.489,91 D'); 
       console.log(x)
       console.log('Banco de Dados "balancete" já existe!')
     } else {
@@ -24,10 +24,31 @@ cloudant.db.create('balancete')
 
 const balancete = cloudant.db.use('balancete');
 
-// READ balancetes from database
+// NEW balancete
+exports.newBalancete = async(req, res, next) => {  
+  console.log('In route - newBalancete');
+  console.log(req.headers.string);
+  let balanceteData = await functions.balanceSheet(req.headers.string);
+  // console.log(balanceteData);
+  return balancete.insert(balanceteData)
+    .then(dataBalancete => {
+      console.log('Balancete adicionado com sucesso!');
+      console.log(dataBalancete)
+      res.send(dataBalancete);
+
+    })
+    .catch(error => {
+      console.log('Falha ao tentar registrar balancete');
+      return res.status(500).json({
+        message: 'Falha ao tentar salvar balancete.',
+        error: error,
+      })
+    });
+};
+
+// READ balancetes from database -OK
 exports.getBalancetes = (req, res, next) => {
   console.log('In route - getBalancetes')
-
   return balancete.list({include_docs: true})
     .then(fetchedBalancete => {
       let balancetes = [];
@@ -36,13 +57,18 @@ exports.getBalancetes = (req, res, next) => {
         balancetes[row] = {
           _id: fetchedBalancete.id,
           companyId: fetchedBalancete.doc.companyId,
-          balanceSheet: fetchedBalancete.doc.balanceSheet,
-          date: fetchedBalancete.doc.date,
-          timestamp: fetchedName.doc.timestamp,
+          classification: fetchedBalancete.doc.classification,
+          description: fetchedBalancete.doc.description,
+          description_nd: fetchedBalancete.doc.description_nd,
+          initialCash: fetchedBalancete.doc.initialCash,
+          debit: fetchedBalancete.doc.debit,
+          credit: fetchedBalancete.doc.credit,
+          finalCash: fetchedBalancete.doc.finalCash,
         };
         row = row + 1;
       });
       console.log('Balancetes recebido com sucesso!')
+      console.log(balancetes)
       return res.status(200).json(balancetes)
     })
     .catch(error => {
@@ -51,35 +77,6 @@ exports.getBalancetes = (req, res, next) => {
         message: 'Falha ao tentar pegar balancete.',
         error: error,
       })
-    })
-}
-
-// CREATE balancetes to database
-exports.addBalancete = (req, res, next) => {
-  console.log('In route - addBalancete');
-  let balancete = {
-    companyId: req.body.companyId,
-    balanceSheet: req.body.balanceSheet,
-    date: req.body.date,
-    timestamp: req.body.timestamp,
-  };
-  return balancete.insert(balancete)
-    .then(addedBalancete => {
-      console.log('Balancete adicionado com sucesso!');
-      return res.status(201).json({
-        _id: addedBalancete.id,
-        companyId: addedBalancete.companyId,
-        balanceSheet: addedBalancete.balanceSheet,
-        date: addedBalancete.date,
-        timestamp: addedBalancete.timestamp,
-      });
-    })
-    .catch(error => {
-      console.log('Falha ao tentar registrar balancete');
-      return res.status(500).json({
-        message: 'Falha ao tentar salvar balancete.',
-        error: error,
-      });
     });
 };
 
@@ -108,11 +105,11 @@ exports.updateBalancete = (req, res, next) => {
 };
 
 // DELETE balancete to database
-exports.deleteBalancete = (req, res, next) => {
+exports.deleteBalancete = (req, res, next, balancete) => {
   console.log('In route - deleteBalancete')
-  let removeBalancete = { _id: req.body.id }
-
-  balancete.delete(removeBalancete)
+  let idBalancete = { _id: req.headers.id };
+  console.log(req.body.id);
+  return balancete.delete(idBalancete)
     .then(()=>{
       console.log('Balancete deletado com sucesso!')
       return res.status(201).json({ message: 'Balancete deletado com sucesso!'})
@@ -124,4 +121,4 @@ exports.deleteBalancete = (req, res, next) => {
         error: error,
       })
     });
-}
+};
