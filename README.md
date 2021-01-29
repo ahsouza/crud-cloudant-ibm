@@ -58,6 +58,54 @@ npm run start
 
 Your application will be running at `http://localhost:3000`.  You can access the `/health` endpoint at the host. You can also verify the state of your locally running application using the Selenium UI test script included in the `scripts` directory.
 
+
+
+- ENDPOINTS LOCAL
+
+
+```bash
+http://localhost:3000/api/balancete/getAll
+```
+Output: 
+```js
+   {
+        "_id": "7ea9ee435ac3deef276ba47944c055da",
+        "companyId": "LH9aTkaysZSK74RFE",
+        "date": "2021-01-01T03:00:00.000Z",
+        "balanceteSheet": [
+            {
+                "i": 1,
+                "classification": "412",
+                "description": "(-) DEDUÇÕES RECEITA BRUTA D D",
+                "description_nd": "DEDUÇÕES DA RECEITA BRUTA D D",
+                "initialCash": "107,31",
+                "debit": "2382,6",
+                "credit": "0",
+                "finalCash": "2.489,91"
+            }
+        ]
+    }
+```
+
+#### POST /api/balancete/save
+
+```bash
+http://localhost:3000/api/balancete/save
+```
+
+Parâmetros Headers
+Content-type - application/json
+
+
+```js
+  string: '412	(-) DEDUÇÕES DA RECEITA BRUTA	107,31 D	2382,6	0	2.489,91 D'
+  mes: 1
+  ano: 2021
+```
+
+
+
+
 #### IBM Cloud Developer Tools
 
 Install [IBM Cloud Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started) on your machine by running the following command:
