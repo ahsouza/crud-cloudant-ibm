@@ -19,6 +19,10 @@ In this sample application, you will create a basic web application using Expres
 
 You can access the cloud native microservice capabilities at the following endpoints:
 - Health endpoint: `/health`
+- GET endpoint: `/api/balancete/getAll`
+- POST endpoint: `/api/balancete/save`
+- DELETE endpoint: `/api/balancete/remove`
+
 
 ## Steps
 
