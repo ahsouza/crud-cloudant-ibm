@@ -60,7 +60,7 @@ Your application will be running at `http://localhost:3000`.  You can access the
 
 
 
-- ENDPOINTS LOCAL
+## ENDPOINTS LOCAL
 
 
 ```bash
