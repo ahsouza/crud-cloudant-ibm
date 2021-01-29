@@ -1,5 +1,6 @@
 // import módulos
 const functions = require('./../helpers/formatColsInRow');
+var moment = require('moment'); 
 const IBMCloudEnv = require('ibm-cloud-env')
 IBMCloudEnv.init('/server/config/mappings.json')
 // Configurando Cloudant
@@ -24,13 +25,29 @@ cloudant.db.create('balancete')
 
 const balancete = cloudant.db.use('balancete');
 
-// NEW balancete
+// NEW balanceteSheet
 exports.newBalancete = async(req, res, next) => {  
   console.log('In route - newBalancete');
   console.log(req.headers.string);
   let balanceteData = await functions.balanceSheet(req.headers.string);
-  // console.log(balanceteData);
-  return balancete.insert(balanceteData)
+  console.log(balanceteData);
+  let balance = {
+    companyId: 'LH9aTkaysZSK74RFE',
+    date: new Date( moment().month(parseInt(req.headers.mes) - 1).year(req.headers.ano).startOf("month")),
+    balanceteSheet: [
+      {
+        i: balanceteData.i,
+        classification: balanceteData.classification,
+        description: balanceteData.description,
+        description_nd: balanceteData.description_nd,
+        initialCash: balanceteData.initialCash,
+        debit: balanceteData.debit,
+        credit: balanceteData.credit,
+        finalCash: balanceteData.finalCash
+      }
+    ],
+  }
+  return balancete.insert(balance)
     .then(dataBalancete => {
       console.log('Balancete adicionado com sucesso!');
       console.log(dataBalancete)
@@ -47,7 +64,7 @@ exports.newBalancete = async(req, res, next) => {
 };
 
 // READ balancetes from database -OK
-exports.getBalancetes = (req, res, next) => {
+exports.getBalancetesSheet = (req, res, next) => {
   console.log('In route - getBalancetes')
   return balancete.list({include_docs: true})
     .then(fetchedBalancete => {
@@ -57,7 +74,8 @@ exports.getBalancetes = (req, res, next) => {
         balancetes[row] = {
           _id: fetchedBalancete.id,
           companyId: fetchedBalancete.doc.companyId,
-          classification: fetchedBalancete.doc.classification,
+          date: fetchedBalancete.doc.date,
+          balanceteSheet: fetchedBalancete.doc.balanceteSheet,
           description: fetchedBalancete.doc.description,
           description_nd: fetchedBalancete.doc.description_nd,
           initialCash: fetchedBalancete.doc.initialCash,
@@ -80,36 +98,12 @@ exports.getBalancetes = (req, res, next) => {
     });
 };
 
-// UPDATE balancetes to database
-exports.updateBalancete = (req, res, next) => {
-  console.log('In route - updateBalancete');
-
-  let modified_balancete = {
-    _id: req.body.id,
-    companyId: req.body.companyId,
-    balanceSheet: req.body.balanceSheet,
-  }
-
-  return balancete.update(modified_balancete)
-    .then(()=>{
-      console.log('Balancete atualizado com sucesso!');
-      return res.status(201).json({ message: 'Balancete atualizado com sucesso!'});
-    })
-    .catch(error => {
-      console.log('Falha ao tentar atualizar balancete');
-      return res.status(500).json({
-        message: 'Falha ao tentar atualizar balancete.',
-        error: error,
-      });
-    });
-};
-
 // DELETE balancete to database
-exports.deleteBalancete = (req, res, next, balancete) => {
+exports.deleteBalancete = (req, res, next) => {
   console.log('In route - deleteBalancete')
   let idBalancete = { _id: req.headers.id };
-  console.log(req.body.id);
-  return balancete.delete(idBalancete)
+  console.log(req.headers.id);
+  return balancete.destroy(idBalancete)
     .then(()=>{
       console.log('Balancete deletado com sucesso!')
       return res.status(201).json({ message: 'Balancete deletado com sucesso!'})
